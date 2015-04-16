@@ -20,6 +20,10 @@ Settings::register('service.vimeo.default', [
 	'username' => null
 ]);
 
+Settings::register('service.youtube.default', [
+	'username' => null
+]);
+
 Settings::register('service.facebook.default', [
 	'appId' => null,
 	'appSecret' => null,
