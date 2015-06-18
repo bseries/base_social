@@ -12,28 +12,29 @@
 
 namespace base_social\models;
 
+use Exception;
 use TwitterOAuth\Auth\SingleUserAuth as ClientAuth;
 use TwitterOAuth\Serializer\ArraySerializer as ClientSerializer;
 use base_social\models\TwitterTweets;
-use Exception;
 
-class Twitter extends \base_core\models\Base {
+class Twitter {
 
-	protected $_meta = [
-		'connection' => false
-	];
-
-	public static function all(array $config) {
-		$results = static::_api('/statuses/user_timeline', $config, [
-			// Show tweets by us only.
-			'screen_name' => $config['username'],
-			'exclude_replies' => true
+	public static function allByAuthor($name, array $config) {
+		return static::_api('/statuses/user_timeline', $config, [
+			'screen_name' => $name
 		]);
+	}
 
-		foreach ($results as &$result) {
-			$result = TwitterTweets::create(['raw' => $result]);
-		}
-		return $results;
+	public static function allByTag($name, array $config) {
+		return static::_api('/search/tweets', $config, [
+			'q' => '#' . $search['tag']
+		]);
+	}
+
+	public static function search($q, array $config) {
+		return static::_api('/search/tweets', $config, [
+			'q' => $q
+		]);
 	}
 
 	protected static function _api($url, array $config, array $params = []) {
@@ -44,7 +45,15 @@ class Twitter extends \base_core\models\Base {
 			'oauth_token_secret' => $config['accessTokenSecret']
 		], new ClientSerializer());
 
-		return $connection->get($url, $params);
+		$data = $connection->get($url, $params);
+
+		$results = [];
+		foreach ($data as $result) {
+			$results[] = TwitterTweets::create([
+				'raw' => $result
+			]);
+		}
+		return $results;
 	}
 }
 

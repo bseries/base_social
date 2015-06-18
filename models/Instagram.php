@@ -16,16 +16,12 @@ use Guzzle\Http\Client;
 use base_social\models\InstagramMedia;
 use lithium\analysis\Logger;
 
-class Instagram extends \base_core\models\Base {
-
-	protected $_meta = [
-		'connection' => false
-	];
+class Instagram {
 
 	// Gets all media.
 	// @link http://instagram.com/developer/endpoints/users/#get_users_media_recent
-	public static function all(array $config) {
-		$results = static::_api("users/{$config['userId']}/media/recent", $config);
+	public static function allMediaByAuthor($name, array $config) {
+		$results = static::_api("users/{$name}/media/recent", $config);
 
 		if (!$results) {
 			return $results;

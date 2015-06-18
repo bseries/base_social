@@ -42,6 +42,10 @@ class TwitterTweets extends \base_core\models\Base {
 		return (boolean) $entity->raw['in_reply_to_status_id'];
 	}
 
+	public function faved($entity) {
+		return $entity->raw['favorited'];
+	}
+
 	public function excerpt($entity) {
 		return Textual::limit($entity->raw['text'], 20);
 	}
