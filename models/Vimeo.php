@@ -12,52 +12,33 @@
 
 namespace base_social\models;
 
-use lithium\storage\Cache;
 use Guzzle\Http\Client;
+use base_social\models\VimeoVideos;
 
-class Vimeo extends \base_core\models\Base {
-
-	protected $_meta = [
-		'connection' => false
-	];
-
-	public static function validate($id) {
-		return (boolean) static::first($id);
-	}
+// Currently doesn't need any credential details as
+// we access just the public API.
+class Vimeo {
 
 	public static function first($id) {
-		$cacheKey = 'vimeo_videos_' . $id;
-
-		if ($cached = Cache::read('default', $cacheKey)) {
-			return $cached;
-		}
-		$result = static::_api('video/' . $id);
-
-		if (!$result) {
+		if (!$result = static::_api('video/' . $id)) {
 			return false;
 		}
-		$result = static::create(array_shift($result));
-
-		Cache::write('default', $cacheKey, $result);
-		return $result;
+		return VimeoVideos::create(['raw' => array_shift($result)]);
 	}
 
 	public static function latest($username) {
-		$cacheKey = 'vimeo_videos_latest_' . $username;
-
-		if ($cached = Cache::read('default', $cacheKey)) {
-			return $cached;
-		}
 		$results = static::_api($username . '/videos');
-
-		$result = static::create(array_shift($results));
-		Cache::write('default', $cacheKey, $result, '+1 day');
-		return $result;
+		return VimeoVideos::create(['raw' => array_shift($results)]);
 	}
 
-	// @fixme Cache this.
 	public static function all($username) {
-		return static::_api($username . '/videos');
+		if (!$results = static::_api($username . '/videos')) {
+			return [];
+		};
+		foreach ($results as &$result) {
+			$result = VimeoVideos::create(['raw' => $result]);
+		}
+		return $results;
 	}
 
 	protected static function _api($url) {
@@ -67,7 +48,6 @@ class Vimeo extends \base_core\models\Base {
 		try {
 			$response = $request->send();
 		} catch (\Exception $e) {
-			// var_dump($e->getMessage());
 			return false;
 		}
 		return json_decode($response->getBody(), true);
