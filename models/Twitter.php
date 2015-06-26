@@ -19,9 +19,12 @@ use base_social\models\TwitterTweets;
 
 class Twitter {
 
+	// https://dev.twitter.com/rest/reference/get/statuses/user_timeline
 	public static function allByAuthor($name, array $config) {
 		return static::_api('/statuses/user_timeline', $config, [
-			'screen_name' => $name
+			'screen_name' => $name,
+			'include_rts' => true,
+			'exclude_replies' => false
 		]);
 	}
 
