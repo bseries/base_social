@@ -30,9 +30,23 @@ Settings::register('service.facebook.default', [
 	'pageUrl' => null
 ]);
 
+// Twitter Settings
+//
+// - How to get your Twitter OAuth Tokens -
+//
+// Read:
+// https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+//
+// Ensure you've added your phone number to the account:
+// https://support.twitter.com/articles/321492-hinzufugen-der-telefonnummer-zum-account
+//
+// 1. Goto https://apps.twitter.com/ and create a new App (in this case its the website)
+// 2. Specify a callback URL using the website's domain i.e. `http://example.com/oauth/cb`.
+//
 Settings::register('service.twitter.default', [
 	'username' => null,
 	'consumerKey' => null,
+	'consumerSecret' => null,
 	'accessToken' => null,
 	'accessTokenSecret' => null
 ]);
