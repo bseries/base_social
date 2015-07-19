@@ -5,10 +5,10 @@
     "type": "lithium-library",
     "license": "proprietary",
     "authors": [
-      {
-        "name": "Atelier Disko",
-        "homepage": "http://atelierdisko.de"
-      }
+        {
+          "name": "Atelier Disko",
+          "homepage": "http://atelierdisko.de"
+        }
     ],
     "require": {
         "php": ">=5.5.0",
