@@ -19,7 +19,7 @@
         "composer/installers": "1.*@stable",
         "ricardoper/TwitterOAuth": "2.1.*@stable",
         "davidpersson/textual": "1.0.*@stable",
-        "davidpersson/mm": "2.0.*@beta"
+        "davidpersson/mm": "2.1.*@dev"
     },
     "repositories": [
       { "type": "vcs", "url": "git@code.atelierdisko:base_core.git" },
