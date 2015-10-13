@@ -17,7 +17,7 @@
 
 namespace base_social\models;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use base_social\models\InstagramMedia;
 use lithium\analysis\Logger;
 
