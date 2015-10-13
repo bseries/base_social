@@ -38,14 +38,14 @@ class Instagram {
 	}
 
 	protected static function _api($url, array $config, array $params = []) {
-		$client = new Client('https://api.instagram.com/v1/');
-		$request = $client->get($url);
-
-		$request->getQuery()->set('access_token', $config['accessToken']);
-		// $request->addHeader('Accept-Charset', 'utf-8');
+		$client = new Client(['base_uri' => 'https://api.instagram.com/v1/']);
 
 		try {
-			$response = $request->send();
+			$response = $client->request('GET', $url, [
+				'query' => [
+					'access_token' => $config['accessToken']
+				]
+			]);
 		} catch (\Exception $e) {
 			Logger::notice('Failed Instagram-API request: ' . $e->getMessage());
 			return false;

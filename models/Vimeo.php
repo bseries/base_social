@@ -47,11 +47,10 @@ class Vimeo {
 	}
 
 	protected static function _api($url) {
-		$client = new Client('https://vimeo.com/api/v2/');
-		$request = $client->get($url . '.json');
+		$client = new Client(['base_uri' => 'https://vimeo.com/api/v2/']);
 
 		try {
-			$response = $request->send();
+			$response = $client->request('GET', $url . '.json');
 		} catch (\Exception $e) {
 			return false;
 		}
