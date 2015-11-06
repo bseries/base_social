@@ -102,6 +102,10 @@ class TwitterTweets extends \base_core\models\Base {
 	public function published($entity) {
 		return date('Y-m-d H:i:s', strtotime($entity->raw['created_at']));
 	}
+
+	public function tags($entity) {
+		return Set::extract($entity->raw, '/entities/hashtags/text');
+	}
 }
 
 ?>
