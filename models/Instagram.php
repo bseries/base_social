@@ -18,6 +18,8 @@
 namespace base_social\models;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use InvalidArgumentException;
 use base_social\models\InstagramMedia;
 use lithium\analysis\Logger;
 
@@ -26,6 +28,9 @@ class Instagram {
 	// Gets all media.
 	// @link http://instagram.com/developer/endpoints/users/#get_users_media_recent
 	public static function allMediaByAuthor($name, array $config) {
+		if (!is_numeric($name)) {
+			throw new InvalidArgumentException('Instagram author name must be used ID (numeric).');
+		}
 		$results = static::_api("users/{$name}/media/recent", $config);
 
 		if (!$results) {
@@ -46,8 +51,18 @@ class Instagram {
 					'access_token' => $config['accessToken']
 				]
 			]);
-		} catch (\Exception $e) {
-			Logger::notice('Failed Instagram-API request: ' . $e->getMessage());
+		} catch (RequestException $e) {
+			$message  = "Failed Instagram-API request:\n";
+			$message .= 'message: ' . $e->getMessage() . "\n";
+			$message .= 'target: ' . $e->getRequest()->getRequestTarget() . "\n";
+			$message .= 'request: ' . json_encode($e->getRequest()->getHeaders(), JSON_PRETTY_PRINT) . "\n";
+
+			if ($e->hasResponse()) {
+				$message .=  'response: ' . json_encode($e->getResponse()->getHeaders(), JSON_PRETTY_PRINT) . "\n";
+			}
+			Logger::notice($message);
+
+			// Gracefully fail, API requests may fail also because service is down.
 			return false;
 		}
 		$result = json_decode($response->getBody(), true);
