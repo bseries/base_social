@@ -47,17 +47,11 @@ class InstagramMedia extends \base_core\models\Base {
 		$options += [
 			'html' => true
 		];
-		if (!$options['html']) {
-			return $entity->raw['images']['standard_resolution'];
+		$cover = $entity->cover();
+
+		if ($cover && $cover['type'] === 'image') {
+			return $options['html'] ? "<img src=\"{$cover['url']}\">" : $cover['url'];
 		}
-
-		// Make links work with HTTPS, too. By default instagram URLs are HTTP.
-		$image = str_replace('http://', '//', $entity->raw['images']['standard_resolution']);
-
-		$html = '';
-		$html .= "<img width=\"{$image['width']}\" height=\"{$image['height']}\" src=\"{$image['url']}\">";
-
-		return $html;
 	}
 
 	public function published($entity) {
@@ -66,6 +60,27 @@ class InstagramMedia extends \base_core\models\Base {
 
 	public function tags($entity) {
 		return $entity->raw['tags'];
+	}
+
+	// Enforce HTTPS, old instagram resources may still have HTTP protocol, but
+	// service supports HTTPS. We don't know if this is embedded in HTTPS pages
+	// or not. So we ensure highest standart possible to get arround broken page
+	// errors.
+	//
+	// Chooses highest resolution possible.
+	public function cover($entity) {
+		if ($entity->raw['type'] === 'image') {
+			return [
+				'type' => 'image',
+				'url' => str_replace('http://', 'https://', $entity->raw['images']['standard_resolution']['url'])
+			];
+		}
+		if ($entity->raw['type'] === 'video') {
+			return [
+				'type' => 'video',
+				'url' => str_replace('http://', 'https://', $entity->raw['videos']['standard_resolution']['url'])
+			];
+		}
 	}
 }
 

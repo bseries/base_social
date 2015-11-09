@@ -85,22 +85,14 @@ class TwitterTweets extends \base_core\models\Base {
 			);
 		}
 
-		// Twitter not always includes this parameter.
-		if (isset($entities['media'])) {
-			foreach ($entities['media'] as $item) {
-				if ($item['type'] == 'photo') {
-					$text = str_replace(
-						$item['url'],
-						// "<img src=\"{$item['media_url_https']}\">",
-						"<a class=\"tweet-media\" href=\"{$item['media_url_https']}\" target=\"new\">{$item['display_url']}</a>",
-						$text
-					);
-				}
-			}
+		foreach ($entity->media() as $item) {
+			$text = str_replace(
+				$item['url'],
+				"<a class=\"tweet-media\" href=\"{$item['url']}\" target=\"new\">{$item['display_url']}</a>",
+				$text
+			);
 		}
-		$text = Textual::autoLink($text, ['html' => true]);
-
-		return $text;
+		return Textual::autoLink($text, ['html' => true]);
 	}
 
 	public function published($entity) {
@@ -109,6 +101,29 @@ class TwitterTweets extends \base_core\models\Base {
 
 	public function tags($entity) {
 		return Set::extract($entity->raw, '/entities/hashtags/text');
+	}
+
+	// Currently only supports photos as it is limited by service.
+	// https://dev.twitter.com/overview/api/entities-in-twitter-objects#media
+	public function media($entity) {
+		$results = [];
+		$entities = $entity->raw['entities'];
+
+		// Twitter does not always includes this parameter in API responses.
+		if (!isset($entities['media'])) {
+			return $results;
+		}
+		foreach ($entities['media'] as $item) {
+			if ($item['type'] !== 'photo') { // Future proof.
+				continue;
+			}
+			$results[] = [
+				'type' => 'image',
+				'url' => $item['media_url_https'],
+				'display_url' => $item['display_url']
+			];
+		}
+		return $results;
 	}
 
 	/* Deprecated / BC */

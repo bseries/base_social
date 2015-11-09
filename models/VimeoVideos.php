@@ -54,6 +54,9 @@ class VimeoVideos extends \base_core\models\Base {
 		return Set::extract($entity->raw, '/tags/tag');
 	}
 
+	// Vimeo Basic accounts do not expose raw video links. Embedding via ID must be used.
+	public function cover($entity) {}
+
 	/* Deprecated / BC */
 
 	public function excerpt($entity) {
