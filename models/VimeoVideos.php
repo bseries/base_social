@@ -39,7 +39,10 @@ class VimeoVideos extends \base_core\models\Base {
 		return $entity->raw['link'];
 	}
 
-	public function body($entity) {
+	public function body($entity, array $options = []) {
+		$options += [
+			'html' => true // currently noop
+		];
 		return $entity->raw['description'];
 	}
 

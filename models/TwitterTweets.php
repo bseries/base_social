@@ -51,9 +51,17 @@ class TwitterTweets extends \base_core\models\Base {
 		return $entity->raw['favorited'];
 	}
 
-	public function body($entity) {
+	public function body($entity, array $options = []) {
+		$options += [
+			'html' => true
+		];
+
 		$text = $entity->raw['text'];
 		$entities = $entity->raw['entities'];
+
+		if (!$options['html']) {
+			return $text;
+		}
 
 		foreach ($entities['hashtags'] as $item) {
 			$text = str_replace(
