@@ -59,8 +59,18 @@ class VimeoVideos extends \base_core\models\Base {
 	}
 
 	// Vimeo Basic accounts do not expose raw video links. Embedding via ID must be used.
-	public function cover($entity) {
-		return null;
+	// FIXME Find a way to support external media URLs.
+	public function cover($entity, array $options = []) {
+		$options += ['internal' => false];
+
+		if (!$options['internal']) {
+			return null;
+		}
+		return [
+			'type' => 'video',
+			'url' => 'vimeo://' . $entity->id(),
+			'title' => $entity->title()
+		];
 	}
 
 	public function media($entity) {

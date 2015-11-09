@@ -93,12 +93,18 @@ class TwitterTweets extends \base_core\models\Base {
 		return Set::extract($entity->raw, '/entities/hashtags/text');
 	}
 
-	public function cover($entity) {}
+	public function cover($entity, array $options = []) {}
 
 	// Currently only supports photos as it is limited by service.
 	// https://dev.twitter.com/overview/api/entities-in-twitter-objects#media
-	public function media($entity) {
+	// FIXME Find a way to support internal media URLs.
+	public function media($entity, array $options = []) {
+		$options += ['internal' => false];
 		$results = [];
+
+		if ($options['internal']) {
+			return [];
+		}
 		$entities = $entity->raw['entities'];
 
 		// Twitter does not always includes this parameter in API responses.

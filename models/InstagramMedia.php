@@ -47,7 +47,7 @@ class InstagramMedia extends \base_core\models\Base {
 		$options += [
 			'html' => true
 		];
-		$cover = $entity->cover();
+		$cover = $entity->cover(['internal' => false]);
 
 		if ($cover && $cover['type'] === 'image') {
 			return $options['html'] ? "<img src=\"{$cover['url']}\">" : $cover['url'];
@@ -68,22 +68,31 @@ class InstagramMedia extends \base_core\models\Base {
 	// errors.
 	//
 	// Chooses highest resolution possible.
-	public function cover($entity) {
-		if ($entity->raw['type'] === 'image') {
-			return [
-				'type' => 'image',
-				'url' => str_replace('http://', 'https://', $entity->raw['images']['standard_resolution']['url'])
-			];
+	public function cover($entity, array $options = []) {
+		$options += ['internal' => false];
+
+		if ($options['internal']) {
+			$result['url'] = 'instagram://' . $entity->id();
 		}
-		if ($entity->raw['type'] === 'video') {
-			return [
-				'type' => 'video',
-				'url' => str_replace('http://', 'https://', $entity->raw['videos']['standard_resolution']['url'])
-			];
+		if ($entity->raw['type'] === 'image' && !$options['internal']) {
+			$result['url'] = str_replace(
+				'http://', 'https://', $entity->raw['images']['standard_resolution']['url']
+			);
 		}
+		if ($entity->raw['type'] === 'video' && !$options['internal']) {
+			$result['url'] = str_replace(
+				'http://', 'https://', $entity->raw['videos']['standard_resolution']['url']
+			);
+		}
+
+		return [
+			'type' => $entity->raw['type'],
+			'url' => $url,
+			'title' => $entity->title()
+		];
 	}
 
-	public function media($entity) {
+	public function media($entity, array $options = []) {
 		return [];
 	}
 }
