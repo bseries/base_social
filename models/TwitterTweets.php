@@ -51,10 +51,6 @@ class TwitterTweets extends \base_core\models\Base {
 		return $entity->raw['favorited'];
 	}
 
-	public function excerpt($entity) {
-		return Textual::limit($entity->raw['text'], 20);
-	}
-
 	public function body($entity) {
 		$text = $entity->raw['text'];
 		$entities = $entity->raw['entities'];
@@ -105,6 +101,16 @@ class TwitterTweets extends \base_core\models\Base {
 
 	public function tags($entity) {
 		return Set::extract($entity->raw, '/entities/hashtags/text');
+	}
+
+	/* Deprecated / BC */
+
+	public function excerpt($entity) {
+		trigger_error(
+			'Tweet excerpts are deprecated, manually truncate the body field.',
+			E_USER_DEPRECATED
+		);
+		return Textual::limit($entity->raw['text'], 20);
 	}
 }
 

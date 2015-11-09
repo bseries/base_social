@@ -39,10 +39,6 @@ class VimeoVideos extends \base_core\models\Base {
 		return $entity->raw['link'];
 	}
 
-	public function excerpt($entity) {
-		return Textual::limit($entity->raw['description'], 20);
-	}
-
 	public function body($entity) {
 		return $entity->raw['description'];
 	}
@@ -53,6 +49,16 @@ class VimeoVideos extends \base_core\models\Base {
 
 	public function tags($entity) {
 		return Set::extract($entity->raw, '/tags/tag');
+	}
+
+	/* Deprecated / BC */
+
+	public function excerpt($entity) {
+		trigger_error(
+			'Vimeo excerpts are deprecated, manually truncate the body field.',
+			E_USER_DEPRECATED
+		);
+		return Textual::limit($entity->raw['description'], 20);
 	}
 }
 
