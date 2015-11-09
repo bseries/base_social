@@ -12,4 +12,4 @@
 
 ### Backwards Incompatible Changes
 
-- Instagram body has been deprecated in favor of using cover().
+- Instagram body now returns caption instead of image use cover() instead.

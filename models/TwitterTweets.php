@@ -35,7 +35,9 @@ class TwitterTweets extends \base_core\models\Base {
 		return $entity->raw['user']['screen_name'];
 	}
 
-	public function title($entity) {}
+	public function title($entity) {
+		return Textual::limit($entity->raw['text'], 20);
+	}
 
 	public function url($entity) {
 		return 'https://twitter.com/' . $entity->raw['user']['screen_name'] . '/status/' . $entity->raw['id'];
@@ -142,7 +144,7 @@ class TwitterTweets extends \base_core\models\Base {
 
 	public function excerpt($entity) {
 		trigger_error(
-			'Tweet excerpts are deprecated, manually truncate the body field.',
+			'Tweet excerpts are deprecated, use title instead.',
 			E_USER_DEPRECATED
 		);
 		return Textual::limit($entity->raw['text'], 20);

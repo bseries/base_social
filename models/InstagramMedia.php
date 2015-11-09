@@ -36,7 +36,7 @@ class InstagramMedia extends \base_core\models\Base {
 	}
 
 	public function title($entity) {
-		return $entity->raw['caption']['text'];
+		return Textual::limit($entity->raw['caption']['text'], 20);
 	}
 
 	public function url($entity) {
@@ -44,7 +44,7 @@ class InstagramMedia extends \base_core\models\Base {
 	}
 
 	public function body($entity, array $options = []) {
-		return $entity->bcBody($options);
+		return $entity->raw['caption']['text'];
 	}
 
 	public function published($entity) {
@@ -87,23 +87,6 @@ class InstagramMedia extends \base_core\models\Base {
 
 	public function media($entity, array $options = []) {
 		return [];
-	}
-
-	/* Deprecated / BC */
-
-	public function bcBody($entity, array $options = []) {
-		trigger_error(
-			'Instagram body method has been deprecated, use cover() instead.',
-			E_USER_DEPRECATED
-		);
-		$options += [
-			'html' => true
-		];
-		$cover = $entity->cover(['internal' => false]);
-
-		if ($cover && $cover['type'] === 'image') {
-			return $options['html'] ? "<img src=\"{$cover['url']}\">" : $cover['url'];
-		}
 	}
 }
 
