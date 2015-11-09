@@ -27,8 +27,11 @@ class InstagramMedia extends \base_core\models\Base {
 		'connection' => false
 	];
 
+	// Works with shortcodes instead of IDs. These have proven
+	// to be more versatile.
 	public function id($entity) {
-		return $entity->raw['id'];
+		preg_match('#instagr(\.am|am\.com)/p/([^/]+)/?#i', $entity->raw['link'], $matches);
+		return $matches[2];
 	}
 
 	public function author($entity) {
