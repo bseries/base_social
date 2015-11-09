@@ -64,6 +64,10 @@ class InstagramMedia extends \base_core\models\Base {
 	public function cover($entity, array $options = []) {
 		$options += ['internal' => false];
 
+		$result = [
+			'type' => $entity->raw['type'],
+			'title' => $entity->title()
+		];
 		if ($options['internal']) {
 			$result['url'] = 'instagram://' . $entity->id();
 		}
@@ -78,11 +82,7 @@ class InstagramMedia extends \base_core\models\Base {
 			);
 		}
 
-		return [
-			'type' => $entity->raw['type'],
-			'url' => $url,
-			'title' => $entity->title()
-		];
+		return $result;
 	}
 
 	public function media($entity, array $options = []) {
