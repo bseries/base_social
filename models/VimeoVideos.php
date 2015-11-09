@@ -35,6 +35,10 @@ class VimeoVideos extends \base_core\models\Base {
 		return $entity->raw['user']['name'];
 	}
 
+	public function title($entity) {
+		return $entity->raw['name'];
+	}
+
 	public function url($entity) {
 		return $entity->raw['link'];
 	}
@@ -55,7 +59,13 @@ class VimeoVideos extends \base_core\models\Base {
 	}
 
 	// Vimeo Basic accounts do not expose raw video links. Embedding via ID must be used.
-	public function cover($entity) {}
+	public function cover($entity) {
+		return null;
+	}
+
+	public function media($entity) {
+		return [];
+	}
 
 	/* Deprecated / BC */
 

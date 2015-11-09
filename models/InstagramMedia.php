@@ -82,6 +82,10 @@ class InstagramMedia extends \base_core\models\Base {
 			];
 		}
 	}
+
+	public function media($entity) {
+		return [];
+	}
 }
 
 ?>

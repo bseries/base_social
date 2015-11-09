@@ -35,20 +35,10 @@ class TwitterTweets extends \base_core\models\Base {
 		return $entity->raw['user']['screen_name'];
 	}
 
+	public function title($entity) {}
+
 	public function url($entity) {
 		return 'https://twitter.com/' . $entity->raw['user']['screen_name'] . '/status/' . $entity->raw['id'];
-	}
-
-	public function retweeted($entity) {
-		return $entity->raw['retweeted'];
-	}
-
-	public function replied($entity) {
-		return (boolean) $entity->raw['in_reply_to_status_id'];
-	}
-
-	public function faved($entity) {
-		return $entity->raw['favorited'];
 	}
 
 	public function body($entity, array $options = []) {
@@ -103,6 +93,8 @@ class TwitterTweets extends \base_core\models\Base {
 		return Set::extract($entity->raw, '/entities/hashtags/text');
 	}
 
+	public function cover($entity) {}
+
 	// Currently only supports photos as it is limited by service.
 	// https://dev.twitter.com/overview/api/entities-in-twitter-objects#media
 	public function media($entity) {
@@ -124,6 +116,20 @@ class TwitterTweets extends \base_core\models\Base {
 			];
 		}
 		return $results;
+	}
+
+	/* Type specific methods */
+
+	public function retweeted($entity) {
+		return $entity->raw['retweeted'];
+	}
+
+	public function replied($entity) {
+		return (boolean) $entity->raw['in_reply_to_status_id'];
+	}
+
+	public function faved($entity) {
+		return $entity->raw['favorited'];
 	}
 
 	/* Deprecated / BC */
