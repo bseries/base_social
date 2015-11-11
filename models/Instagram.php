@@ -51,6 +51,10 @@ class Instagram {
 					'access_token' => $config['accessToken']
 				]
 			]);
+
+			$result = json_decode($response->getBody(), true);
+			return static::_resolvePaginated($result['pagination'], $result['data']);
+
 		} catch (RequestException $e) {
 			$message  = "Failed Instagram-API request:\n";
 			$message .= 'message: ' . $e->getMessage() . "\n";
@@ -65,8 +69,26 @@ class Instagram {
 			// Gracefully fail, API requests may fail also because service is down.
 			return false;
 		}
+	}
+
+	// Recursively resolves paginated data.
+	// Will never cache first page, but cache all subsequent pages.
+	protected static function _resolvePaginated(array $pagination, array $data) {
+		$client = new Client();
+
+		// `pagination` key is an empty array if there are no more pages.
+		if (!$pagination) {
+			Logger::debug("Instagram-API finished resolving pagination.");
+			return $data;
+		}
+		Logger::debug("Instagram-API retrieving next page `{$pagination['next_url']}`.");
+
+		$response = $client->request('GET', $pagination['next_url']);
 		$result = json_decode($response->getBody(), true);
-		return $result['data'];
+
+		return static::_resolvePaginated(
+			$result['pagination'], array_merge($data, $result['data'])
+		);
 	}
 }
 
