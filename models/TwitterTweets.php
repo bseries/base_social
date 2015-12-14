@@ -92,7 +92,7 @@ class TwitterTweets extends \base_core\models\Base {
 	}
 
 	public function tags($entity) {
-		return Set::extract($entity->raw, '/entities/hashtags/text');
+		return Set::extract($entity->raw['entities'], '/hashtags/text');
 	}
 
 	public function cover($entity, array $options = []) {}
