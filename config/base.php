@@ -37,6 +37,12 @@ Settings::register('service.facebook.default', [
 	'pageUrl' => null
 ]);
 
+Settings::register('service.soundcloud.default', [
+	'clientId' => null,
+	'clientSecret' => null
+]);
+
+
 // Twitter Settings
 //
 // - How to get your Twitter OAuth Tokens -
