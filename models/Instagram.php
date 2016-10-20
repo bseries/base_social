@@ -59,10 +59,14 @@ class Instagram {
 			$message  = "Failed Instagram-API request:\n";
 			$message .= 'message: ' . $e->getMessage() . "\n";
 			$message .= 'target: ' . $e->getRequest()->getRequestTarget() . "\n";
-			$message .= 'request: ' . json_encode($e->getRequest()->getHeaders(), JSON_PRETTY_PRINT) . "\n";
+			$message .= 'request: ' . json_encode(
+				$e->getRequest()->getHeaders(), JSON_PRETTY_PRINT
+			) . "\n";
 
 			if ($e->hasResponse()) {
-				$message .=  'response: ' . json_encode($e->getResponse()->getHeaders(), JSON_PRETTY_PRINT) . "\n";
+				$message .=  'response: ' . json_encode(
+					$e->getResponse()->getHeaders(), JSON_PRETTY_PRINT
+				) . "\n";
 			}
 			Logger::notice($message);
 
