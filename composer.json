@@ -18,8 +18,7 @@
         "unionofrad/lithium": "1.0.*@dev",
         "composer/installers": "1.*@stable",
         "ricardoper/TwitterOAuth": "2.1.*@stable",
-        "davidpersson/textual": "1.0.*@stable",
-        "davidpersson/mm": "2.1.*@beta"
+        "davidpersson/textual": "1.0.*@stable"
     },
     "repositories": [
       { "type": "vcs", "url": "git@code.atelierdisko:base_core.git" },
