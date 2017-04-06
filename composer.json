@@ -12,8 +12,8 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "atelierdisko/base_core": "1.5.*",
-        "atelierdisko/base_media": "1.5.*",
+        "atelierdisko/base_core": "1.5.*@dev",
+        "atelierdisko/base_media": "1.5.*@dev",
         "guzzlehttp/guzzle": "6.*@stable",
         "unionofrad/lithium": "1.1.*@dev",
         "composer/installers": "1.*@stable",
