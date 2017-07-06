@@ -58,45 +58,68 @@ class InstagramMedia extends \base_core\models\Base {
 		return $entity->raw['tags'];
 	}
 
-	// Enforce HTTPS, old instagram resources may still have HTTP protocol, but
-	// service supports HTTPS. We don't know if this is embedded in HTTPS pages
-	// or not. So we ensure highest standart possible to get arround broken page
-	// errors.
-	//
 	// Chooses highest resolution possible.
 	public function cover($entity, array $options = []) {
 		$options += ['internal' => false];
-
 		$result = [
 			'type' => $entity->raw['type'],
 			'title' => $entity->title()
 		];
 
 		if ($options['internal']) {
-			$result['url'] = 'instagram://' . $entity->id();
-			return $result;
+			return ['url' => 'instagram://' . $entity->id()] + $result;
 		}
+		if (!$url = static::_url($entity->raw)) {
+			return false;
+		}
+		return compact('url') + $result;
+	}
 
-		switch ($entity->raw['type']) {
+	public function media($entity, array $options = []) {
+		$options += ['internal' => false];
+		$results = [];
+
+		if ($entity->raw['type'] !== 'carousel') {
+			return $results;
+		}
+		foreach ($entity->raw['carousel_media'] as $medium) {
+			if (!$url = static::_url($medium)) {
+				continue;
+			}
+			$results[] = [
+				'type' => 'image',
+				'title' => $entity->title(),
+				'url' => $url
+			];
+		}
+		return $results;
+	}
+
+	// Selects (and upgrades) URL to resource from a media array as returned
+	// by the service.
+	//
+	// Enforce HTTPS, old instagram resources may still have HTTP protocol, but
+	// service supports HTTPS. We don't know if this is embedded in HTTPS pages
+	// or not. So we ensure highest standart possible to get arround broken page
+	// errors.
+	//
+	// Chooses highest resolution possible.
+	protected static function _url(array $item) {
+		switch ($item['type']) {
 			case 'image':
-			case 'carousel':
-				$result['url'] = str_replace(
-					'http://', 'https://', $entity->raw['images']['standard_resolution']['url']
+			case 'carousel': // Allow to pick a cover image.
+				return str_replace(
+					'http://', 'https://', $item['images']['standard_resolution']['url']
 				);
 			break;
 			case 'video':
-				$result['url'] = str_replace(
-					'http://', 'https://', $entity->raw['videos']['standard_resolution']['url']
+				return str_replace(
+					'http://', 'https://', $item['videos']['standard_resolution']['url']
 				);
 				break;
 			default:
 				return false;
 		}
-		return $result;
-	}
-
-	public function media($entity, array $options = []) {
-		return [];
 	}
 }
 
