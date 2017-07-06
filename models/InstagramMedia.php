@@ -71,20 +71,27 @@ class InstagramMedia extends \base_core\models\Base {
 			'type' => $entity->raw['type'],
 			'title' => $entity->title()
 		];
+
 		if ($options['internal']) {
 			$result['url'] = 'instagram://' . $entity->id();
-		}
-		if ($entity->raw['type'] === 'image' && !$options['internal']) {
-			$result['url'] = str_replace(
-				'http://', 'https://', $entity->raw['images']['standard_resolution']['url']
-			);
-		}
-		if ($entity->raw['type'] === 'video' && !$options['internal']) {
-			$result['url'] = str_replace(
-				'http://', 'https://', $entity->raw['videos']['standard_resolution']['url']
-			);
+			return $result;
 		}
 
+		switch ($entity->raw['type']) {
+			case 'image':
+			case 'carousel':
+				$result['url'] = str_replace(
+					'http://', 'https://', $entity->raw['images']['standard_resolution']['url']
+				);
+			break;
+			case 'video':
+				$result['url'] = str_replace(
+					'http://', 'https://', $entity->raw['videos']['standard_resolution']['url']
+				);
+				break;
+			default:
+				return false;
+		}
 		return $result;
 	}
 
