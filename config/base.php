@@ -37,6 +37,14 @@ Settings::register('service.facebook.default', [
 	'pageUrl' => null
 ]);
 
+// Soundcloud Settings
+//
+// 1. Get a SC account
+// 2. Register an new "app" and submit it
+//    https://developers.soundcloud.com/
+// 3. Once reviewed you can access the app and
+//    get the required credentials.
+//
 Settings::register('service.soundcloud.default', [
 	'clientId' => null,
 	'clientSecret' => null
