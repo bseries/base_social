@@ -46,8 +46,9 @@ Settings::register('service.facebook.default', [
 //    get the required credentials.
 //
 Settings::register('service.soundcloud.default', [
-	'clientId' => null,
-	'clientSecret' => null
+	'username' => null, // the username from the URL i.e. `'ki-records`'
+	'clientId' => null, // required for API access
+	'clientSecret' => null // required for API access
 ]);
 
 
