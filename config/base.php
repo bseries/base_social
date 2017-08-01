@@ -100,4 +100,8 @@ Settings::register('service.instagram.default', [
 	'accessToken' => null
 ]);
 
+Settings::register('service.bandcamp.default', [
+	'username' => null // the name as used in the URL `'<ki-records>.bandcamp.com'`
+]);
+
 ?>
