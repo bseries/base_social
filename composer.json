@@ -3,12 +3,6 @@
     "description": "Social functionality for Bento.",
     "type": "lithium-library",
     "license": ["BSD-3-Clause"],
-    "authors": [
-        {
-          "name": "Atelier Disko",
-          "homepage": "https://atelierdisko.de"
-        }
-    ],
     "require": {
         "php": "^5.5 || ^7.0",
         "bseries/base_core": "1.5.*@dev",
@@ -18,9 +12,6 @@
         "composer/installers": "1.*@stable",
         "ricardoper/TwitterOAuth": "2.1.*@stable",
         "davidpersson/textual": "1.0.*@stable"
-    },
-    "repositories": [
-      { "type": "vcs", "url": "git@code.atelierdisko:base_core.git" },
-      { "type": "vcs", "url": "git@code.atelierdisko:base_media.git" }
-    ]
+    }
+  ]
 }
