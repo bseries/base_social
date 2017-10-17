@@ -13,5 +13,4 @@
         "ricardoper/TwitterOAuth": "2.1.*@stable",
         "davidpersson/textual": "1.0.*@stable"
     }
-  ]
 }
