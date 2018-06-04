@@ -12,16 +12,12 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "atelierdisko/base_core": "1.4.*",
-        "atelierdisko/base_media": "1.4.*",
+        "bseries/base_core": "1.4.*",
+        "bseries/base_media": "1.4.*",
         "guzzlehttp/guzzle": "6.*@stable",
         "unionofrad/lithium": "1.0.*@dev",
         "composer/installers": "1.*@stable",
         "ricardoper/TwitterOAuth": "2.1.*@stable",
         "davidpersson/textual": "1.0.*@stable"
-    },
-    "repositories": [
-      { "type": "vcs", "url": "git@code.atelierdisko:base_core.git" },
-      { "type": "vcs", "url": "git@code.atelierdisko:base_media.git" }
-    ]
+    }
 }
